@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abitur-Dashboard: Saxitoxin (Von grob zu fein)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 40vh;
+    max-height: 400px;
+}
+@media (min-width: 768px) {
+    .chart-container {
+        height: 50vh;
+        max-height: 500px;
+    }
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.level-card {
+    border-left: 4px solid #0f766e;
+}
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col">
+
+<!-- Chosen Palette: Slate & Teal -->
+<!-- Application Structure Plan: Die Applikation erzwingt eine hierarchische Informationsaufnahme ("Grob zu Fein"). Jede Sektion (Ökologie, Neuro, Bewertung) beginnt mit Basiswissen und vertieft sich stufenweise in zelluläre/molekulare Details. Ein Sidebar-Layout (Desktop) oder Top-Scroll-Menü (Mobile) steuert die Hauptthemen. Akkordeons und interaktive Charts (Chart.js) fordern aktives Klicken und veranschaulichen komplexe Dynamiken (Populationswachstum, Aktionspotenzial). -->
+<!-- Visualization & Content Choices: 1. Ökologie: Liniendiagramm (Chart.js) vergleicht exponentielles r-Strategen-Wachstum mit logistischem Wachstum. 2. Neuro: Liniendiagramm (Chart.js) zeigt AP vs. blockiertes AP; Klick simuliert Giftinjektion. 3. System-Boxen strukturieren das Nahrungsnetz visuell. 4. Tabellen kontrastieren Gifte prägnant. Alle gewählten Methoden basieren auf purem HTML/CSS/Canvas. Keine externen SVGs oder Mermaid. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<header class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+        <div class="font-bold text-xl tracking-tight flex items-center">
+            <span class="text-2xl mr-2">🔬</span> PSP-Abiturvorbereitung
+        </div>
+    </div>
+</header>
+
+<div class="flex-1 w-full max-w-7xl mx-auto flex flex-col md:flex-row">
+    
+    <nav class="w-full md:w-64 bg-white shadow-sm md:shadow-md border-r border-slate-200 md:min-h-[calc(100vh-4rem)] flex-shrink-0">
+        <div class="flex md:flex-col overflow-x-auto p-4 space-x-2 md:space-x-0 md:space-y-2">
+            <button onclick="switchTab('intro')" id="btn-intro" class="w-full text-left px-4 py-3 rounded-md font-bold bg-teal-700 text-white transition whitespace-nowrap">Übersicht</button>
+            <button onclick="switchTab('oeko')" id="btn-oeko" class="w-full text-left px-4 py-3 rounded-md font-bold text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">1. Ökologie</button>
+            <button onclick="switchTab('neuro')" id="btn-neuro" class="w-full text-left px-4 py-3 rounded-md font-bold text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">2. Neurobiologie</button>
+            <button onclick="switchTab('bewertung')" id="btn-bewertung" class="w-full text-left px-4 py-3 rounded-md font-bold text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">3. Bewertung</button>
+            <button onclick="switchTab('transfer')" id="btn-transfer" class="w-full text-left px-4 py-3 rounded-md font-bold text-red-600 hover:bg-red-50 transition whitespace-nowrap">4. Transfer (Prüfung)</button>
+        </div>
+    </nav>
+
+    <main class="flex-1 p-4 md:p-8 bg-slate-50 w-full overflow-hidden">
+
+        <section id="tab-intro" class="tab-content active">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center max-w-3xl mx-auto mt-10">
+                <div class="text-6xl mb-4">🌊🦪☠️</div>
+                <h1 class="text-3xl font-extrabold mb-4">Paralytische Muschelvergiftung (PSP)</h1>
+                <p class="text-lg text-slate-600 mb-8">
+                    Dieses Dokument strukturiert das Thema streng deduktiv: vom makroskopischen Ökosystem bis zum zellulären Rezeptor. Arbeite die Tabs links der Reihe nach durch.
+                </p>
+                <button onclick="switchTab('oeko')" class="px-6 py-3 bg-teal-600 text-white font-bold rounded-md hover:bg-teal-700 transition shadow-lg">Start: Ökologische Perspektive</button>
+            </div>
+        </section>
+
+        <section id="tab-oeko" class="tab-content">
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-6">1. Die Ökologische Perspektive</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 level-card">
+                    <span class="text-xs font-bold text-teal-600 uppercase tracking-wide">Stufe 1: Grob (Die Basis)</span>
+                    <h3 class="text-xl font-bold mt-1 mb-2">Dinoflagellaten (Gattung Alexandrium)</h3>
+                    <p class="text-slate-700 mb-2">Dinoflagellaten bilden als einzellige Planktonorganismen (Phytoplankton) die Basis mariner Nahrungsketten. Sie arbeiten als Primärproduzenten.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 level-card">
+                    <span class="text-xs font-bold text-teal-600 uppercase tracking-wide">Stufe 2: Mittel (Lebenszyklus)</span>
+                    <h3 class="text-xl font-bold mt-1 mb-2">Überdauerung und Algenblüten</h3>
+                    <p class="text-slate-700 mb-4">Der Lebenszyklus wechselt zwischen haploiden und diploiden Phasen. Bei schlechten Bedingungen bilden sie Dauerstadien (Zysten). Diese Zysten sinken ins Sediment, überleben dort bis zu 150 Jahre und keimen bei optimalem Licht und Temperatur aus. Das initiiert neue Algenblüten ("Red Tides").</p>
+                    <div class="bg-slate-100 p-4 rounded text-sm text-slate-800">
+                        <b>Schwellenwerte:</b> Eine Blüte färbt das Wasser ab ca. 20 Mio. Zellen/Liter sichtbar rot. Für eine tödliche Muschelvergiftung reichen jedoch bereits 200.000 Zellen/Liter aus.
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 level-card">
+                    <span class="text-xs font-bold text-teal-600 uppercase tracking-wide">Stufe 3: Fein (Populationsdynamik)</span>
+                    <h3 class="text-xl font-bold mt-1 mb-2">Strategien und abiotische Faktoren</h3>
+                    <p class="text-slate-700 mb-4">Dinoflagellaten agieren bei Algenblüten als <b>r-Strategen</b>. Sie nutzen einen plötzlichen Ressourcenüberschuss für exponentielles Wachstum. Abiotische Faktoren (Temperatur, Salinität, Stratifikation) steuern dieses Wachstum massiv.</p>
+                    <div class="chart-container mb-4">
+                        <canvas id="ecoChart"></canvas>
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded text-sm text-amber-900 border border-amber-200">
+                        <b>Klimawandel-Folgen:</b> Steigende Wassertemperaturen treiben <i>Alexandrium</i> in höhere Breiten (Arktis). Süßwasserzufluss ändert die Salinität und verschiebt die Artenzusammensetzung.
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 level-card border-l-red-600">
+                    <span class="text-xs font-bold text-red-600 uppercase tracking-wide">Stufe 4: System (Toxinakkumulation)</span>
+                    <h3 class="text-xl font-bold mt-1 mb-2">Der Weg des Giftes durch das Nahrungsnetz</h3>
+                    <div class="flex flex-col md:flex-row gap-4 mb-4">
+                        <div class="flex-1 bg-slate-50 p-4 rounded border border-slate-200 text-center">
+                            <div class="text-2xl mb-1">🦠</div>
+                            <h4 class="font-bold text-sm">Produzent</h4>
+                            <p class="text-xs text-slate-600">Alge produziert Toxin</p>
+                        </div>
+                        <div class="flex items-center justify-center text-slate-400">➡️</div>
+                        <div class="flex-1 bg-slate-50 p-4 rounded border border-slate-200 text-center">
+                            <div class="text-2xl mb-1">🦪</div>
+                            <h4 class="font-bold text-sm">Bioakkumulation</h4>
+                            <p class="text-xs text-slate-600">Muschel filtert & speichert in Verdauungsdrüse</p>
+                        </div>
+                        <div class="flex items-center justify-center text-slate-400">➡️</div>
+                        <div class="flex-1 bg-slate-50 p-4 rounded border border-slate-200 text-center">
+                            <div class="text-2xl mb-1">🦅🚶</div>
+                            <h4 class="font-bold text-sm">Biomagnifikation</h4>
+                            <p class="text-xs text-slate-600">Aufkonzentrierung in Vögeln & Menschen</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-700 bg-red-50 p-3 rounded">
+                        <b>Prüfer-Tipp zur Pazifischen Auster (Crassostrea gigas):</b> Diese invasive Art breitet sich im Wattenmeer aus und konkurriert hart mit der heimischen Miesmuschel. Das verschiebt das gesamte Nahrungsnetz. Nutze dieses Beispiel in der Prüfung, um ökologische Instabilität durch invasive Arten zu illustrieren.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-neuro" class="tab-content">
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-6">2. Die Neurophysiologische Perspektive</h2>
+
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 level-card">
+                    <span class="text-xs font-bold text-teal-600 uppercase tracking-wide">Stufe 1: Grob (Erregungsleitung)</span>
+                    <h3 class="text-xl font-bold mt-1 mb-2">Ruhe- und Aktionspotenzial</h3>
+                    <p class="text-slate-700 mb-2"><b>Ruhepotenzial:</b> Die Natrium-Kalium-Pumpe (braucht ATP) und K-Hintergrundkanäle halten das Axon-Innere bei ca. -70 mV.</p>
+                    <p class="text-slate-700"><b>Aktionspotenzial (AP):</b> Überschreitet ein Reiz den Schwellenwert (-50 mV), öffnen sich spannungsabhängige Natriumkanäle schlagartig. Die Zelle depolarisiert. Danach strömt Kalium aus (Repolarisation).</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 level-card">
+                    <span class="text-xs font-bold text-teal-600 uppercase tracking-wide">Stufe 2: Mittel (Die Synapse)</span>
+                    <h3 class="text-xl font-bold mt-1 mb-2">Signalübertragung am Endknöpfchen</h3>
+                    <p class="text-slate-700 mb-3">Das AP erreicht das Endknöpfchen. Calcium strömt ein. Das triggert die Exozytose von Neurotransmittern (z. B. Acetylcholin). Diese binden an Rezeptoren der postsynaptischen Membran.</p>
+                    <div class="bg-slate-100 p-4 rounded text-sm text-slate-800">
+                        <b>Zusatzwissen (15 Punkte):</b> Unterscheide Rezeptoren. <i>Ionotrope</i> Rezeptoren (wie der ACh-Rezeptor) sind direkte Ionenkanäle. <i>Metabotrope</i> Rezeptoren wirken indirekt über Second-Messenger-Kaskaden (z. B. cAMP). Saxitoxin blockiert direkte Kanäle.
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 level-card border-l-red-600">
+                    <span class="text-xs font-bold text-red-600 uppercase tracking-wide">Stufe 3: Fein (Molekularer Mechanismus)</span>
+                    <h3 class="text-xl font-bold mt-1 mb-2">Blockade durch Saxitoxin (STX)</h3>
+                    <p class="text-slate-700 mb-4">STX ist ein hochpotenter Natriumkanal-Blocker. Es bindet physikalisch an die äußere Öffnung der spannungsgesteuerten Natriumkanäle und verstopft sie. Die Folge: Kein Natrium strömt ein, kein AP entsteht, die Erregungsleitung bricht zusammen.</p>
+                    
+                    <div class="flex gap-2 mb-4">
+                        <button onclick="simulateNeuro('normal')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 rounded font-bold text-sm transition">Normales AP</button>
+                        <button onclick="simulateNeuro('stx')" class="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded font-bold text-sm transition">STX blockieren</button>
+                    </div>
+                    <div class="chart-container mb-4">
+                        <canvas id="neuroChart"></canvas>
+                    </div>
+
+                    <p class="text-sm font-bold text-red-700">Symptome: Prickeln (Lippe/Zunge), Taubheit, Lähmung der Skelettmuskulatur, Tod durch Atemstillstand bei vollem Bewusstsein.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 level-card border-l-slate-800">
+                    <span class="text-xs font-bold text-slate-800 uppercase tracking-wide">Stufe 4: System (Gifte im Vergleich)</span>
+                    <h3 class="text-xl font-bold mt-1 mb-4">Differenzialdiagnose</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700">
+                                    <th class="p-2 border-b">Toxin</th>
+                                    <th class="p-2 border-b">Wirkort</th>
+                                    <th class="p-2 border-b">Mechanismus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b bg-red-50 font-bold text-red-900">
+                                    <td class="p-2">Saxitoxin (STX)</td>
+                                    <td class="p-2">Na-Kanal (Axon)</td>
+                                    <td class="p-2">Verstopft Pore -> Kein AP.</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-2 font-bold">Botulinumtoxin</td>
+                                    <td class="p-2">Präsynapse</td>
+                                    <td class="p-2">Verhindert Transmitter-Ausschüttung.</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-2 font-bold">Curare</td>
+                                    <td class="p-2">Postsynapse</td>
+                                    <td class="p-2">Blockiert ACh-Rezeptoren kompetitiv.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-bold">E605 (Sarin)</td>
+                                    <td class="p-2">Synaptischer Spalt</td>
+                                    <td class="p-2">Hemmt Acetylcholinesterase -> Dauererregung.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-bewertung" class="tab-content">
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-6">3. Bewertung und gesellschaftliche Dimension</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold mb-4">Überwachungsprogramme (Monitoring)</h3>
+                    <ul class="space-y-4 text-slate-700">
+                        <li class="bg-slate-50 p-3 rounded border border-slate-200">
+                            <b>Mäuse-Bioassay:</b> Historische Methode. Extrakt wird Mäusen gespritzt. <i>Bewertung (AFB III):</i> Ethisch extrem umstritten und wissenschaftlich ungenau.
+                        </li>
+                        <li class="bg-slate-50 p-3 rounded border border-slate-200">
+                            <b>HPLC:</b> Chemische Hochleistungsanalyse. Teuer, aber exakt.
+                        </li>
+                        <li class="bg-slate-50 p-3 rounded border border-slate-200">
+                            <b>ELISA:</b> Immunologischer Schnelltest. Antikörperbasiert.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold mb-4">Schutz, Grenzwerte & Ökonomie</h3>
+                    <p class="text-slate-700 mb-4">
+                        <b>EU-Grenzwert:</b> 800 µg Saxitoxin-Äquivalent pro kg Muschelfleisch. Überschreitungen lösen sofortige Fangverbote aus.
+                    </p>
+                    <p class="text-slate-700 mb-4">
+                        <b>Effektivität:</b> STX ist extrem hitzebeständig und säurestabil. Kochen zerstört das Gift nicht. Prävention ist der einzige Schutz.
+                    </p>
+                    <div class="bg-red-50 p-4 rounded border border-red-200 text-sm text-red-900">
+                        <b>Sozioökonomischer Konflikt:</b> Verzehrverbote schützen Gesundheit und Leben von Küstenbewohnern und Touristen. Sie verursachen jedoch massive wirtschaftliche Verluste in Fischerei und Aquakultur. Ein klassischer Zielkonflikt.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-transfer" class="tab-content">
+            <h2 class="text-3xl font-extrabold text-red-700 mb-6">4. Transfer-Schecks (AFB II & III)</h2>
+            <p class="text-slate-700 mb-6">Klicke auf die Fragen, um die Lösungsansätze zu prüfen. Nutze präzise Fachsprache.</p>
+
+            <div class="space-y-4">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <button onclick="toggleAcc('acc-1')" class="w-full text-left px-6 py-4 font-bold text-slate-900 bg-slate-50 hover:bg-slate-100 flex justify-between items-center transition">
+                        Struktur & Funktion: Warum bindet STX an den Natriumkanal?
+                        <span id="icon-acc-1" class="text-slate-400">➕</span>
+                    </button>
+                    <div id="acc-1" class="hidden px-6 py-4 text-slate-700 border-t border-slate-200 text-sm">
+                        STX ist ein positiv geladenes Molekül (Guanidinium-Gruppen). Die äußere Pore des Natriumkanals ist negativ geladen (um Natriumionen anzuziehen). STX passt räumlich und elektrostatisch exakt in diese Pore (Schlüssel-Schloss-Prinzip) und blockiert sie.
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <button onclick="toggleAcc('acc-2')" class="w-full text-left px-6 py-4 font-bold text-slate-900 bg-slate-50 hover:bg-slate-100 flex justify-between items-center transition">
+                        Info & Kommunikation: Warum bricht die Codierung der Reizstärke zusammen?
+                        <span id="icon-acc-2" class="text-slate-400">➕</span>
+                    </button>
+                    <div id="acc-2" class="hidden px-6 py-4 text-slate-700 border-t border-slate-200 text-sm">
+                        Das Nervensystem codiert die Reizstärke über die <b>Frequenz</b> der Aktionspotenziale (Viele APs = starker Reiz). Da STX die Entstehung von APs komplett blockiert, sinkt die Frequenz auf Null. Die Information über den Reiz wird gelöscht.
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <button onclick="toggleAcc('acc-3')" class="w-full text-left px-6 py-4 font-bold text-slate-900 bg-slate-50 hover:bg-slate-100 flex justify-between items-center transition">
+                        Ökosystemmanagement: Beurteile die Ansiedlung der Pazifischen Auster.
+                        <span id="icon-acc-3" class="text-slate-400">➕</span>
+                    </button>
+                    <div id="acc-3" class="hidden px-6 py-4 text-slate-700 border-t border-slate-200 text-sm">
+                        Die Auster verdrängt als invasive Art die heimische Miesmuschel. Bei gehäuften Algenblüten filtriert sie große Mengen Wasser. Da unbekannt ist, wie sich die Gift-Akkumulationsraten der Auster von denen der Miesmuschel unterscheiden, entsteht ein unkalkulierbares Risiko für das Nahrungsnetz und menschliche Konsumenten. Das Ökosystem wird instabiler.
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <button onclick="toggleAcc('acc-4')" class="w-full text-left px-6 py-4 font-bold text-slate-900 bg-slate-50 hover:bg-slate-100 flex justify-between items-center transition">
+                        Evolution: Welchen adaptiven Wert hat die Giftproduktion für die Alge?
+                        <span id="icon-acc-4" class="text-slate-400">➕</span>
+                    </button>
+                    <div id="acc-4" class="hidden px-6 py-4 text-slate-700 border-t border-slate-200 text-sm">
+                        Die Synthese von STX kostet die Alge Energie. Der Selektionsvorteil liegt im Fraßschutz. Zooplankton (wie Copepoden) meidet toxische Algen oder wird durch den Verzehr motorisch gehemmt. Der Fraßdruck sinkt. Das ermöglicht der Alge bei günstigen abiotischen Bedingungen ein ungehindertes, exponentielles Populationswachstum.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script>
+let ecoChartInstance = null;
+let neuroChartInstance = null;
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+
+    document.querySelectorAll('nav button').forEach(el => {
+        el.classList.remove('bg-teal-700', 'text-white');
+        if(el.id === 'btn-transfer') {
+            el.classList.add('text-red-600');
+        } else {
+            el.classList.add('text-slate-600');
+        }
+    });
+
+    const activeBtn = document.getElementById('btn-' + tabId);
+    activeBtn.classList.remove('text-slate-600', 'text-red-600', 'hover:bg-slate-100', 'hover:bg-red-50');
+    activeBtn.classList.add('bg-teal-700', 'text-white');
+
+    if (tabId === 'oeko') initEcoChart();
+    if (tabId === 'neuro') initNeuroChart();
+}
+
+function toggleAcc(id) {
+    const el = document.getElementById(id);
+    const icon = document.getElementById('icon-' + id);
+    if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        icon.textContent = '➖';
+    } else {
+        el.classList.add('hidden');
+        icon.textContent = '➕';
+    }
+}
+
+function initEcoChart() {
+    if (ecoChartInstance) return;
+    const ctx = document.getElementById('ecoChart').getContext('2d');
+    
+    ecoChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Tag 1', 'Tag 5', 'Tag 10', 'Tag 15', 'Tag 20'],
+            datasets: [
+                {
+                    label: 'r-Strategen (Exponentiell - Algenblüte)',
+                    data: [10, 50, 400, 2000, 10000],
+                    borderColor: '#dc2626',
+                    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'K-Strategen (Logistisch)',
+                    data: [10, 30, 80, 95, 100],
+                    borderColor: '#0f766e',
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { type: 'logarithmic', title: { display: true, text: 'Populationsgröße (log)' } }
+            }
+        }
+    });
+}
+
+const neuroTime = [0, 1, 2, 3, 4, 5, 6, 7];
+const neuroNormal = [-70, -70, 30, -80, -75, -70, -70, -70];
+const neuroBlock = [-70, -70, -50, -50, -55, -60, -70, -70];
+
+function initNeuroChart() {
+    if (neuroChartInstance) return;
+    const ctx = document.getElementById('neuroChart').getContext('2d');
+    
+    neuroChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: neuroTime,
+            datasets: [{
+                label: 'Membranpotenzial (mV)',
+                data: neuroNormal,
+                borderColor: '#0f766e',
+                borderWidth: 3,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { title: { display: true, text: 'Zeit (ms)' } },
+                y: { title: { display: true, text: 'Spannung (mV)' }, min: -90, max: 40 }
+            },
+            animation: { duration: 300 }
+        }
+    });
+}
+
+function simulateNeuro(state) {
+    if (!neuroChartInstance) return;
+    if (state === 'normal') {
+        neuroChartInstance.data.datasets[0].data = neuroNormal;
+        neuroChartInstance.data.datasets[0].borderColor = '#0f766e';
+    } else {
+        neuroChartInstance.data.datasets[0].data = neuroBlock;
+        neuroChartInstance.data.datasets[0].borderColor = '#dc2626';
+    }
+    neuroChartInstance.update();
+}
+</script>
+</body>
+</html>
